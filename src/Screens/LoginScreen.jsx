@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   ImageBackground,
@@ -9,6 +10,9 @@ import {
 } from "react-native";
 
 export default function LoginScreen() {
+  const [isFocusedEmailInput, setIsFocusedEmailInput] = useState(false);
+  const [isFocusedPasswordInput, setIsFocusedPasswordInput] = useState(false);
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -20,11 +24,32 @@ export default function LoginScreen() {
           <Text style={styles.authHeader}>Увійти</Text>
           <View style={styles.form}>
             <TextInput
-              style={styles.authInput}
+              onFocus={() => setIsFocusedEmailInput(true)}
+              onBlur={() => setIsFocusedEmailInput(false)}
+              style={[
+                [
+                  styles.authInput,
+                  isFocusedEmailInput && styles.authInputFocused,
+                ],
+              ]}
+              autoCapitalize="none"
               placeholder="Адреса електронної пошти"
+              placeholderTextColor="#BDBDBD"
             />
             <View style={styles.passwordInputWrap}>
-              <TextInput style={styles.authInput} placeholder="Пароль" />
+              <TextInput
+                onFocus={() => setIsFocusedPasswordInput(true)}
+                onBlur={() => setIsFocusedPasswordInput(false)}
+                style={[
+                  [
+                    styles.authInput,
+                    isFocusedPasswordInput && styles.authInputFocused,
+                  ],
+                ]}
+                autoCapitalize="none"
+                placeholder="Пароль"
+                placeholderTextColor="#BDBDBD"
+              />
               <TouchableOpacity style={styles.showPassBtn}>
                 <Text style={styles.showPassBtnText}>Показати</Text>
               </TouchableOpacity>
@@ -32,7 +57,8 @@ export default function LoginScreen() {
                 <Text style={styles.authBtnText}>Увійти</Text>
               </TouchableOpacity>
               <Text style={[styles.textBelowBtn, styles.showPassBtnText]}>
-                Немає аккаунту? <Text style={ styles.textUnderline}>Зареєструватися</Text>
+                Немає аккаунту?{" "}
+                <Text style={styles.textUnderline}>Зареєструватися</Text>
               </Text>
             </View>
           </View>
@@ -54,11 +80,12 @@ const styles = StyleSheet.create({
   authBlock: {
     position: "absolute",
     bottom: 0,
+    paddingTop: 32,
+    paddingBottom: 111,
     paddingLeft: 16,
     paddingRight: 16,
     backgroundColor: "#ffffff",
     width: "100%",
-    height: 489,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
@@ -70,7 +97,6 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "500",
     letterSpacing: 0.3,
-    marginTop: 32,
   },
   form: {
     flex: 1,
@@ -81,10 +107,20 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 50,
     backgroundColor: "#F6F6F6",
-    padding: 16,
+    paddingTop: 16,
+    paddingBottom: 15,
+    paddingLeft: 16,
+    paddingRight: 16,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#E8E8E8",
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
+  },
+  authInputFocused: {
+    borderColor: "#FF6C00",
+    backgroundColor: "#FFFFFF",
+    color: "#212121",
   },
   passwordInputWrap: {
     position: "relative",

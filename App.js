@@ -20,8 +20,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <RegistrationScreen />
-      {/* <LoginScreen></LoginScreen> */}
+      {/* <RegistrationScreen /> */}
+      <LoginScreen></LoginScreen>
     </View>
   );
 }

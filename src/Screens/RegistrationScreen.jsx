@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   ImageBackground,
@@ -8,7 +9,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { AntDesign } from "@expo/vector-icons";
+
 export default function RegistrationScreen() {
+  const [isFocusedLoginInput, setIsFocusedLoginInput] = useState(false);
+  const [isFocusedEmailInput, setIsFocusedEmailInput] = useState(false);
+  const [isFocusedPasswordInput, setIsFocusedPasswordInput] = useState(false);
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -18,21 +25,55 @@ export default function RegistrationScreen() {
       >
         <View style={styles.authBlock}>
           <View style={styles.photoDiv}>
-            {/* <View style={styles.addBtn}></View> */}
-            <Image
+            <AntDesign
+              name="pluscircleo"
+              size={25}
+              color="#FF6C00"
               style={styles.addBtn}
-              source={require("../assets/add.png")}
             />
           </View>
           <Text style={styles.authHeader}>Реєстрація</Text>
           <View style={styles.form}>
-            <TextInput style={styles.authInput} placeholder="Логін" />
             <TextInput
-              style={styles.authInput}
+              onFocus={() => setIsFocusedLoginInput(true)}
+              onBlur={() => setIsFocusedLoginInput(false)}
+              style={[
+                [
+                  styles.authInput,
+                  isFocusedLoginInput && styles.authInputFocused,
+                ],
+              ]}
+              autoCapitalize="none"
+              placeholder="Логін"
+              placeholderTextColor="#BDBDBD"
+            />
+            <TextInput
+              onFocus={() => setIsFocusedEmailInput(true)}
+              onBlur={() => setIsFocusedEmailInput(false)}
+              style={[
+                [
+                  styles.authInput,
+                  isFocusedEmailInput && styles.authInputFocused,
+                ],
+              ]}
+              autoCapitalize="none"
               placeholder="Адреса електронної пошти"
+              placeholderTextColor="#BDBDBD"
             />
             <View style={styles.passwordInputWrap}>
-              <TextInput style={styles.authInput} placeholder="Пароль" />
+              <TextInput
+                onFocus={() => setIsFocusedPasswordInput(true)}
+                onBlur={() => setIsFocusedPasswordInput(false)}
+                style={[
+                  [
+                    styles.authInput,
+                    isFocusedPasswordInput && styles.authInputFocused,
+                  ],
+                ]}
+                autoCapitalize="none"
+                placeholder="Пароль"
+                placeholderTextColor="#BDBDBD"
+              />
               <TouchableOpacity style={styles.showPassBtn}>
                 <Text style={styles.showPassBtnText}>Показати</Text>
               </TouchableOpacity>
@@ -73,8 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     position: "absolute",
     top: -60,
-    left: "50%",
-    transform: "translateX(-44px)",
+    alignSelf: "center",
     height: 120,
     width: 120,
     borderRadius: 16,
@@ -84,21 +124,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 14,
     right: -12.5,
-    // width: 25,
-    // height: 25,
-    // backgroundColor: "#ffffff",
-    // borderColor: "#FF6C00",
-    // borderWidth: 1,
-    // borderRadius: 25 / 2,
   },
   authBlock: {
     position: "absolute",
     bottom: 0,
+    paddingTop: 92,
+    paddingBottom: 45,
     paddingLeft: 16,
     paddingRight: 16,
     backgroundColor: "#ffffff",
     width: "100%",
-    height: 549,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
@@ -109,9 +144,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontStyle: "normal",
     fontWeight: "500",
-    // lineHeight: "normal",
     letterSpacing: 0.3,
-    marginTop: 92,
   },
   form: {
     flex: 1,
@@ -122,10 +155,20 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 50,
     backgroundColor: "#F6F6F6",
-    padding: 16,
+    paddingTop: 16,
+    paddingBottom: 15,
+    paddingLeft: 16,
+    paddingRight: 16,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#E8E8E8",
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
+  },
+  authInputFocused: {
+    borderColor: "#FF6C00",
+    backgroundColor: "#FFFFFF",
+    color: "#212121",
   },
   passwordInputWrap: {
     position: "relative",
