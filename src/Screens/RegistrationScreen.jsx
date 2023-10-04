@@ -7,90 +7,134 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ViewBase,
 } from "react-native";
 
 import { AntDesign } from "@expo/vector-icons";
 
 export default function RegistrationScreen() {
+  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [isFocusedLoginInput, setIsFocusedLoginInput] = useState(false);
   const [isFocusedEmailInput, setIsFocusedEmailInput] = useState(false);
   const [isFocusedPasswordInput, setIsFocusedPasswordInput] = useState(false);
 
+  const onRegisterSubmit = () => {
+    console.log("Login:", `${login}`);
+    console.log("Email:", `${email}`);
+    console.log("Password:", `${password}`);
+  };
+
+  const showPasswordToggle = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("../assets/background.png")}
-        resizeMode="cover"
-        style={styles.bgc}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={-187}
       >
-        <View style={styles.authBlock}>
-          <View style={styles.photoDiv}>
-            <AntDesign
-              name="pluscircleo"
-              size={25}
-              color="#FF6C00"
-              style={styles.addBtn}
-            />
-          </View>
-          <Text style={styles.authHeader}>Реєстрація</Text>
-          <View style={styles.form}>
-            <TextInput
-              onFocus={() => setIsFocusedLoginInput(true)}
-              onBlur={() => setIsFocusedLoginInput(false)}
-              style={[
-                [
-                  styles.authInput,
-                  isFocusedLoginInput && styles.authInputFocused,
-                ],
-              ]}
-              autoCapitalize="none"
-              placeholder="Логін"
-              placeholderTextColor="#BDBDBD"
-            />
-            <TextInput
-              onFocus={() => setIsFocusedEmailInput(true)}
-              onBlur={() => setIsFocusedEmailInput(false)}
-              style={[
-                [
-                  styles.authInput,
-                  isFocusedEmailInput && styles.authInputFocused,
-                ],
-              ]}
-              autoCapitalize="none"
-              placeholder="Адреса електронної пошти"
-              placeholderTextColor="#BDBDBD"
-            />
-            <View style={styles.passwordInputWrap}>
-              <TextInput
-                onFocus={() => setIsFocusedPasswordInput(true)}
-                onBlur={() => setIsFocusedPasswordInput(false)}
-                style={[
-                  [
-                    styles.authInput,
-                    isFocusedPasswordInput && styles.authInputFocused,
-                  ],
-                ]}
-                autoCapitalize="none"
-                placeholder="Пароль"
-                placeholderTextColor="#BDBDBD"
-              />
-              <TouchableOpacity style={styles.showPassBtn}>
-                <Text style={styles.showPassBtnText}>Показати</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.authBtn}>
-                <Text style={styles.authBtnText}>Зареєструватися</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.signinBtn}>
-                <Text style={[styles.showPassBtnText, styles.signinBtnText]}>
-                  Вже є аккаунт?{" "}
-                  <Text style={styles.textUnderline}>Увійти</Text>
-                </Text>
-              </TouchableOpacity>
+        <View style={styles.container}>
+          <ImageBackground
+            source={require("../assets/background.png")}
+            resizeMode="cover"
+            style={styles.bgc}
+          >
+            <View style={styles.authBlock}>
+              <View style={styles.photoDiv}>
+                <AntDesign
+                  name="pluscircleo"
+                  size={25}
+                  color="#FF6C00"
+                  style={styles.addBtn}
+                />
+              </View>
+              <Text style={styles.authHeader}>Реєстрація</Text>
+              <View style={styles.form}>
+                <TextInput
+                  value={login}
+                  onChangeText={setLogin}
+                  onFocus={() => setIsFocusedLoginInput(true)}
+                  onBlur={() => setIsFocusedLoginInput(false)}
+                  style={[
+                    [
+                      styles.authInput,
+                      isFocusedLoginInput && styles.authInputFocused,
+                    ],
+                  ]}
+                  autoCapitalize="none"
+                  placeholder="Логін"
+                  placeholderTextColor="#BDBDBD"
+                />
+
+                <TextInput
+                  value={email}
+                  onChangeText={setEmail}
+                  onFocus={() => setIsFocusedEmailInput(true)}
+                  onBlur={() => setIsFocusedEmailInput(false)}
+                  style={[
+                    [
+                      styles.authInput,
+                      isFocusedEmailInput && styles.authInputFocused,
+                    ],
+                  ]}
+                  autoCapitalize="none"
+                  placeholder="Адреса електронної пошти"
+                  placeholderTextColor="#BDBDBD"
+                />
+                <View style={styles.passwordInputWrap}>
+                  <TextInput
+                    value={password}
+                    onChangeText={setPassword}
+                    onFocus={() => setIsFocusedPasswordInput(true)}
+                    onBlur={() => setIsFocusedPasswordInput(false)}
+                    style={[
+                      [
+                        styles.authInput,
+                        isFocusedPasswordInput && styles.authInputFocused,
+                      ],
+                    ]}
+                    autoCapitalize="none"
+                    placeholder="Пароль"
+                    placeholderTextColor="#BDBDBD"
+                    secureTextEntry={!showPassword}
+                  />
+                  <TouchableOpacity style={styles.showPassBtn}>
+                    <Text
+                      onPress={showPasswordToggle}
+                      style={styles.showPassBtnText}
+                    >
+                      Показати
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                  onPress={onRegisterSubmit}
+                  style={styles.authBtn}
+                >
+                  <Text style={styles.authBtnText}>Зареєструватися</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.signinBtn}>
+                  <Text style={[styles.showPassBtnText, styles.signinBtnText]}>
+                    Вже є аккаунт?{" "}
+                    <Text style={styles.textUnderline}>Увійти</Text>
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </ImageBackground>
         </View>
-      </ImageBackground>
-    </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -176,7 +220,8 @@ const styles = StyleSheet.create({
   showPassBtn: {
     position: "absolute",
     right: 16,
-    top: 16,
+    top: 14,
+    fontSize: 16,
   },
   showPassBtnText: {
     color: "#1B4371",

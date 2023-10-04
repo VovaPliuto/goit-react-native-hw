@@ -11,6 +11,7 @@ import { useFonts } from "expo-font";
 
 import RegistrationScreen from "./src/Screens/RegistrationScreen";
 import LoginScreen from "./src/Screens/LoginScreen";
+import Test from "./src/components/Test";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -18,10 +19,14 @@ export default function App() {
     "Roboto-Regular": require("./src/assets/fonts/Roboto/Roboto-Regular.ttf"),
   });
 
+   if (!fontsLoaded) {
+     return null;
+   }
+
   return (
     <View style={styles.container}>
-      {/* <RegistrationScreen /> */}
-      <LoginScreen></LoginScreen>
+      <RegistrationScreen />
+      {/* <LoginScreen></LoginScreen> */}
     </View>
   );
 }
