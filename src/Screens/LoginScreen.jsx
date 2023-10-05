@@ -23,6 +23,9 @@ export default function LoginScreen() {
   const onLoginSubmit = () => {
     console.log("Email:", `${email}`);
     console.log("Password:", `${password}`);
+
+     setEmail("");
+     setPassword("");
   };
 
   const showPasswordToggle = () => {
@@ -74,12 +77,20 @@ export default function LoginScreen() {
                   autoCapitalize="none"
                   placeholder="Пароль"
                   placeholderTextColor="#BDBDBD"
-                  secureTextEntry={ !showPassword}
+                  secureTextEntry={!showPassword}
                 />
                 <TouchableOpacity style={styles.showPassBtn}>
-                  <Text onPress={showPasswordToggle} style={styles.showPassBtnText}>Показати</Text>
+                  <Text
+                    onPress={showPasswordToggle}
+                    style={styles.showPassBtnText}
+                  >
+                    {!showPassword ? "Показати" : "Сховати"}
+                  </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={onLoginSubmit} style={styles.authBtn}>
+                <TouchableOpacity
+                  onPress={onLoginSubmit}
+                  style={styles.authBtn}
+                >
                   <Text style={styles.authBtnText}>Увійти</Text>
                 </TouchableOpacity>
                 <Text style={[styles.textBelowBtn, styles.showPassBtnText]}>

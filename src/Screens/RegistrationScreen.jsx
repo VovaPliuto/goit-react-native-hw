@@ -30,6 +30,10 @@ export default function RegistrationScreen() {
     console.log("Login:", `${login}`);
     console.log("Email:", `${email}`);
     console.log("Password:", `${password}`);
+
+    setLogin("");
+    setEmail("");
+    setPassword("");
   };
 
   const showPasswordToggle = () => {
@@ -113,7 +117,7 @@ export default function RegistrationScreen() {
                       onPress={showPasswordToggle}
                       style={styles.showPassBtnText}
                     >
-                      Показати
+                      {!showPassword ? "Показати" : "Сховати"}
                     </Text>
                   </TouchableOpacity>
                 </View>
