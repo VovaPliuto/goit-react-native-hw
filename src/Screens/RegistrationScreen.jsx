@@ -11,12 +11,14 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  ViewBase,
 } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { AntDesign } from "@expo/vector-icons";
 
 export default function RegistrationScreen() {
+  const navigation = useNavigation();
+
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,6 +36,8 @@ export default function RegistrationScreen() {
     setLogin("");
     setEmail("");
     setPassword("");
+
+    navigation.navigate("Home");
   };
 
   const showPasswordToggle = () => {
@@ -127,12 +131,18 @@ export default function RegistrationScreen() {
                 >
                   <Text style={styles.authBtnText}>Зареєструватися</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.signinBtn}>
+
+                {/* <TouchableOpacity> */}
                   <Text style={[styles.showPassBtnText, styles.signinBtnText]}>
                     Вже є аккаунт?{" "}
-                    <Text style={styles.textUnderline}>Увійти</Text>
+                  <Text
+                    onPress={() => navigation.navigate("Login")}
+                      style={[styles.textUnderline, styles.showPassBtnText]}
+                    >
+                      Увійти
+                    </Text>
                   </Text>
-                </TouchableOpacity>
+                {/* </TouchableOpacity> */}
               </View>
             </View>
           </ImageBackground>

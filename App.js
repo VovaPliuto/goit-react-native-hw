@@ -1,33 +1,38 @@
-import { StatusBar } from "expo-status-bar";
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-} from "react-native";
+import "react-native-gesture-handler";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 
 import RegistrationScreen from "./src/Screens/RegistrationScreen";
 import LoginScreen from "./src/Screens/LoginScreen";
-import Test from "./src/components/Test";
+import HomeScreen from "./src/Screens/HomeScreen";
+
+const MainStack = createStackNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
     "Roboto-Medium": require("./src/assets/fonts/Roboto/Roboto-Medium.ttf"),
     "Roboto-Regular": require("./src/assets/fonts/Roboto/Roboto-Regular.ttf"),
+    "Roboto-Bold": require("./src/assets/fonts/Roboto/Roboto-Bold.ttf"),
   });
 
-   if (!fontsLoaded) {
-     return null;
-   }
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
-    <View style={styles.container}>
-      {/* <RegistrationScreen /> */}
-      <LoginScreen></LoginScreen>
-    </View>
+    <NavigationContainer>
+      <MainStack.Navigator
+        initialRouteName="Registration"
+        screenOptions={{ headerShown: false }}
+      >
+        <MainStack.Screen name="Registration" component={RegistrationScreen} />
+        <MainStack.Screen name="Login" component={LoginScreen} />
+        <MainStack.Screen name="Home" component={HomeScreen} />
+      </MainStack.Navigator>
+    </NavigationContainer>
   );
 }
 

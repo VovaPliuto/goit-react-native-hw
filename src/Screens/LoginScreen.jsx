@@ -11,8 +11,11 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen() {
+  const navigation = useNavigation();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -24,8 +27,10 @@ export default function LoginScreen() {
     console.log("Email:", `${email}`);
     console.log("Password:", `${password}`);
 
-     setEmail("");
-     setPassword("");
+    setEmail("");
+    setPassword("");
+
+    navigation.navigate("Home");
   };
 
   const showPasswordToggle = () => {
@@ -95,7 +100,9 @@ export default function LoginScreen() {
                 </TouchableOpacity>
                 <Text style={[styles.textBelowBtn, styles.showPassBtnText]}>
                   Немає аккаунту?{" "}
-                  <Text style={styles.textUnderline}>Зареєструватися</Text>
+                  <Text onPress={() => navigation.navigate("Registration")} style={styles.textUnderline}>
+                    Зареєструватися
+                  </Text>
                 </Text>
               </View>
             </View>
