@@ -61,7 +61,9 @@ const HomeScreen = () => {
           title: "Публікації",
           headerTitleAlign: "center",
           headerRight: () => (
-          <HeaderLogoutBtn/>
+            <View style={{right: 16}}>
+              <HeaderLogoutBtn />
+            </View>
           ),
         }}
       ></Tab.Screen>

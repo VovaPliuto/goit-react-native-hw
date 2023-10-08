@@ -11,7 +11,7 @@ export default function HeaderLogoutBtn() {
         navigation.navigate("Login");
       }}
     >
-      <Feather name="log-out" size={24} color="#BDBDBD" style={{ right: 16 }} />
+      <Feather name="log-out" size={24} color="#BDBDBD" />
     </TouchableOpacity>
   );
 }
