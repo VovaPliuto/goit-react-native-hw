@@ -3,14 +3,14 @@ import { View, Text, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather, Ionicons } from "@expo/vector-icons";
 
-import PostsScreen from "./PostsScreen";
-import CreatePostsScreen from "./CreatePostsScreen";
-import ProfileScreen from "./ProfileScreen";
+import PostsScreen from "../Screens/PostsScreen";
+import CreatePostsScreen from "../Screens/CreatePostsScreen";
+import ProfileScreen from "../Screens/ProfileScreen";
 import HeaderLogoutBtn from "../components/HeaderLogoutBtn";
 
 const Tab = createBottomTabNavigator();
 
-const HomeScreen = () => {
+export default function BottomNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -61,7 +61,7 @@ const HomeScreen = () => {
           title: "Публікації",
           headerTitleAlign: "center",
           headerRight: () => (
-            <View style={{right: 16}}>
+            <View style={{ right: 16 }}>
               <HeaderLogoutBtn />
             </View>
           ),
@@ -84,6 +84,4 @@ const HomeScreen = () => {
       ></Tab.Screen>
     </Tab.Navigator>
   );
-};
-
-export default HomeScreen;
+}

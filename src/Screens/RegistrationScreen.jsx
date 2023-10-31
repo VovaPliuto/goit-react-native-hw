@@ -132,17 +132,12 @@ export default function RegistrationScreen() {
                   <Text style={styles.authBtnText}>Зареєструватися</Text>
                 </TouchableOpacity>
 
-                {/* <TouchableOpacity> */}
+                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                   <Text style={[styles.showPassBtnText, styles.signinBtnText]}>
                     Вже є аккаунт?{" "}
-                  <Text
-                    onPress={() => navigation.navigate("Login")}
-                      style={[styles.textUnderline, styles.showPassBtnText]}
-                    >
-                      Увійти
-                    </Text>
+                    <Text style={[styles.textUnderline]}>Увійти</Text>
                   </Text>
-                {/* </TouchableOpacity> */}
+                </TouchableOpacity>
               </View>
             </View>
           </ImageBackground>

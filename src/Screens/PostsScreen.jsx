@@ -1,17 +1,28 @@
-import { Text, View, Image, StyleSheet } from "react-native";
+import { Text, View, Image, StyleSheet, FlatList } from "react-native";
+
+import Post from "../components/Post";
+import ListHeader from "../components/ListHeader";
+import { postsData } from "../data/data.jsx";
+
 export default function PostsScreen() {
   return (
     <View style={styles.container}>
-      <View style={styles.profileWrap}>
-        <Image
-          style={styles.avatar}
-          source={require("../public/images/User.png")}
-        />
-        <View>
-          <Text style={styles.nameText}>Natali Romanova</Text>
-          <Text style={styles.emailText}>email@example.com</Text>
-        </View>
-      </View>
+      <ListHeader />
+      <FlatList
+        style={styles.flatList}
+        data={postsData}
+        renderItem={({ item }) => (
+          <Post
+            image={item.image}
+            title={item.title}
+            comments={item.comments.length}
+            locationName={item.locationName}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={() => <View style={{ height: 34 }}></View>}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 }
@@ -26,24 +37,10 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
   },
-  profileWrap: {
+  flatList: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     gap: 8,
-    alignItems: "center",
-  },
-  nameText: {
-    fontFamily: "Roboto-Bold",
-    fontWeight: "700",
-    fontSize: 13,
-  },
-  emailText: {
-    fontFamily: "Roboto-Regular",
-    fontWeight: "400",
-    fontSize: 11,
-  },
-  avatar: {
-    width: 60,
-    height: 60,
+    marginBottom: 46,
   },
 });

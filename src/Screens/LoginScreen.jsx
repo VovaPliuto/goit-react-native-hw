@@ -98,12 +98,14 @@ export default function LoginScreen() {
                 >
                   <Text style={styles.authBtnText}>Увійти</Text>
                 </TouchableOpacity>
-                <Text style={[styles.textBelowBtn, styles.showPassBtnText]}>
-                  Немає аккаунту?{" "}
-                  <Text onPress={() => navigation.navigate("Registration")} style={styles.textUnderline}>
-                    Зареєструватися
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Registration")}
+                >
+                  <Text style={[styles.textBelowBtn, styles.showPassBtnText]}>
+                    Немає аккаунту?{" "}
+                    <Text style={styles.textUnderline}>Зареєструватися</Text>
                   </Text>
-                </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
