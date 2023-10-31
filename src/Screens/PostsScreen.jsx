@@ -21,6 +21,7 @@ export default function PostsScreen() {
         )}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={() => <View style={{ height: 34 }}></View>}
+        ListFooterComponent={() => <View style={{ height: 46 }}></View>}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -36,11 +37,5 @@ const styles = StyleSheet.create({
     paddingTop: 32,
     paddingLeft: 16,
     paddingRight: 16,
-  },
-  flatList: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 8,
-    marginBottom: 46,
   },
 });

@@ -8,47 +8,64 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
+  FlatList,
 } from "react-native";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 import HeaderLogoutBtn from "../components/HeaderLogoutBtn";
+import Post from "../components/Post";
+import { postsData } from "../data/data.jsx";
 
 export default function ProfileScreen() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView
+      {/* <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={-187}
+      > */}
+      <ImageBackground
+        source={require("../assets/background.png")}
+        resizeMode="cover"
+        style={styles.bgc}
       >
-        <View style={styles.container}>
-          <ImageBackground
-            source={require("../assets/background.png")}
-            resizeMode="cover"
-            style={styles.bgc}
-          >
-            <View style={styles.authBlock}>
-              <View style={styles.photoDiv}>
-                <Image
-                  style={styles.avatar}
-                  source={require("../public/images/user_big_img.png")}
-                  resizeMode="stretch"
-                />
-                <Ionicons
-                  name="close-circle"
-                  size={25}
-                  color="#E8E8E8"
-                  style={styles.addBtn}
-                />
-              </View>
-              <View style={styles.logoutBtn}>
-                <HeaderLogoutBtn />
-              </View>
-              <Text style={styles.title}>Natali Romanova</Text>
-            </View>
-          </ImageBackground>
+        <View style={styles.authBlock}>
+          <View style={styles.photoDiv}>
+            <Image
+              style={styles.avatar}
+              source={require("../public/images/user_big_img.png")}
+              resizeMode="stretch"
+            />
+            <Ionicons
+              name="close-circle"
+              size={25}
+              color="#E8E8E8"
+              style={styles.addBtn}
+            />
+          </View>
+          <View style={styles.logoutBtn}>
+            <HeaderLogoutBtn />
+          </View>
+          <Text style={styles.title}>Natali Romanova</Text>
+          <FlatList
+            style={styles.flatList}
+            data={postsData}
+            renderItem={({ item }) => (
+              <Post
+                image={item.image}
+                title={item.title}
+                comments={item.comments.length}
+                locationName={item.locationName}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+            ItemSeparatorComponent={() => <View style={{ height: 34 }}></View>}
+            ListFooterComponent={() => <View style={{ height: 190 }}></View>}
+            showsVerticalScrollIndicator={false}
+          />
         </View>
-      </KeyboardAvoidingView>
+      </ImageBackground>
+      {/* </KeyboardAvoidingView> */}
     </TouchableWithoutFeedback>
   );
 }
@@ -60,7 +77,6 @@ const styles = StyleSheet.create({
   },
   bgc: {
     flex: 1,
-    // justifyContent: "center",
     alignItems: "center",
     position: "relative",
   },
@@ -70,6 +86,7 @@ const styles = StyleSheet.create({
     paddingTop: 92,
     paddingLeft: 16,
     paddingRight: 16,
+    // paddingBottom: 180,
     backgroundColor: "#ffffff",
     width: "100%",
     height: "100%",
@@ -106,5 +123,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     lineHeight: 35,
     color: "#212121",
+    marginBottom: 33,
   },
 });
