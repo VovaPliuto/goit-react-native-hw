@@ -7,6 +7,7 @@ import PostsScreen from "../Screens/PostsScreen";
 import CreatePostsScreen from "../Screens/CreatePostsScreen";
 import ProfileScreen from "../Screens/ProfileScreen";
 import HeaderLogoutBtn from "../components/HeaderLogoutBtn";
+import HeaderBackBtn from "../components/HeaderBackBtn";
 
 const Tab = createBottomTabNavigator();
 
@@ -73,6 +74,11 @@ export default function BottomNavigator() {
         options={{
           title: "Створити публікацію",
           headerTitleAlign: "center",
+          headerLeft: () => (
+            <View style={{ left: 16 }}>
+              <HeaderBackBtn />
+            </View>
+          ),
         }}
       ></Tab.Screen>
       <Tab.Screen
