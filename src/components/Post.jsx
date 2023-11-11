@@ -1,20 +1,42 @@
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-export default function Post({ image, title, comments, locationName }) {
+export default function Post({
+  image,
+  title,
+  comments,
+  locationName,
+  id,
+  geolocation,
+}) {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.postFrame}>
       <Image style={styles.img} source={image} />
       <Text>{title}</Text>
       <View style={styles.bottomPostWrap}>
-        <View style={styles.commentsWrap}>
-          <Feather name="message-circle" size={24} color={"#BDBDBD"} />
+        <TouchableOpacity
+          style={styles.commentsWrap}
+          onPress={() => navigation.navigate("Comments", { image, id })}
+        >
+          <Feather
+            name="message-circle"
+            size={24}
+            color={"#BDBDBD"}
+            style={comments?.length && styles.iconActive}
+          />
           <Text style={{ color: "#BDBDBD" }}>{comments}</Text>
-        </View>
-        <View style={styles.locationWrap}>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.locationWrap}
+          onPress={() => navigation.navigate("Map", { title, geolocation })}
+        >
           <Feather name="map-pin" size={24} color={"#BDBDBD"} />
           <Text>{locationName}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -46,5 +68,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  iconActive: {
+    color: "#FF6C00",
   },
 });

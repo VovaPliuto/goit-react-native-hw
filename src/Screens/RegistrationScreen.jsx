@@ -29,9 +29,9 @@ export default function RegistrationScreen() {
   const [isFocusedPasswordInput, setIsFocusedPasswordInput] = useState(false);
 
   const onRegisterSubmit = () => {
-    console.log("Login:", `${login}`);
-    console.log("Email:", `${email}`);
-    console.log("Password:", `${password}`);
+    // console.log("Login:", `${login}`);
+    // console.log("Email:", `${email}`);
+    // console.log("Password:", `${password}`);
 
     setLogin("");
     setEmail("");

@@ -17,6 +17,8 @@ export default function PostsScreen() {
             title={item.title}
             comments={item.comments.length}
             locationName={item.locationName}
+            id={item.id}
+            geolocation={item.geolocation}
           />
         )}
         keyExtractor={(item) => item.id}

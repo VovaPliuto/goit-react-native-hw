@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   ImageBackground,
   View,
@@ -11,19 +12,60 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
-import { Camera} from "expo-camera";
+import { Camera, CameraType } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
+import * as Location from "expo-location";
+import { format } from "date-fns";
 import { FontAwesome, Feather } from "@expo/vector-icons";
+import Button from "../components/Button";
 
 export default function CreatePostsScreen() {
+  const navigation = useNavigation();
+
   const [focusedInput, setFocusedInput] = useState(null);
   const [photoName, setPhotoName] = useState("");
 
   const [postPhoto, setPostPhoto] = useState(null);
   const [address, setAddress] = useState("");
+  const [currentGeoLocation, setCurrentGeoLocation] = useState(null);
 
+  const [hasPermission, setHasPermission] = useState(null);
   const [pendingMakePhoto, setPendingMakePhoto] = useState(false);
   const cameraRef = useRef(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+      } else {
+        const location = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Highest,
+          maximumAge: 5000,
+        });
+        setCurrentGeoLocation(location.coords);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      MediaLibrary.requestPermissionsAsync();
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  if (!hasPermission) {
+    return (
+      <Spinner
+        visible={!hasPermission}
+        textContent="No access to camera!"
+        textStyle={styles.spinnerTextStyle}
+      />
+    );
+  }
 
   const makePhoto = async () => {
     setPendingMakePhoto(true);
@@ -60,17 +102,73 @@ export default function CreatePostsScreen() {
     }
   };
 
+  const getLocation = async () => {
+    const location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.Highest,
+      maximumAge: 5000,
+    });
+    setCurrentGeoLocation(location.coords);
+  };
+
+  const getAddress = async () => {
+    if (!currentGeoLocation) {
+      await getLocation();
+    } else {
+      const reverseGeocode = await Location.reverseGeocodeAsync(
+        currentGeoLocation
+      );
+
+      const { street, streetNumber, city, postalCode, country } =
+        reverseGeocode[0];
+      const address = `${street} ${streetNumber} ${city} ${postalCode}, ${country}`;
+      setAddress(address);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const now = new Date();
+    const generatePhotoName = `Photo-${format(now, "yyyy-MM-dd HH:mm.ss")}`;
+
+    if (!photoName.trim().length) setPhotoName(generatePhotoName);
+    if (!address) await getAddress();
+    const data = {
+      img: postPhoto,
+      title: photoName,
+      comments: [],
+      likes: 0,
+      address,
+      geoLocation: currentGeoLocation,
+    };
+    console.log(data);
+
+    resetPost();
+    navigation.navigate("PostsScreen");
+  };
+
+  const resetPost = () => {
+    setPostPhoto(null);
+    setPhotoName("");
+    setAddress("");
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <View style={styles.cameraWrap}>
-          <Camera style={styles.camera} ratio="4:3">
-            <TouchableOpacity style={styles.makePhotoBtn} onPress={makePhoto}>
-              <FontAwesome name="camera" size={24} color="#bdbdbd" />
-            </TouchableOpacity>
-            <Spinner visible={pendingMakePhoto} />
-          </Camera>
-        </View>
+        {postPhoto ? (
+          <ImageBackground
+            source={{ uri: postPhoto }}
+            style={styles.image}
+          ></ImageBackground>
+        ) : (
+          <View style={styles.cameraWrap}>
+            <Camera style={styles.camera} ratio="4:3" ref={cameraRef}>
+              <TouchableOpacity style={styles.makePhotoBtn} onPress={makePhoto}>
+                <FontAwesome name="camera" size={24} color="#bdbdbd" />
+              </TouchableOpacity>
+              <Spinner visible={pendingMakePhoto} />
+            </Camera>
+          </View>
+        )}
 
         <View style={styles.wrapImageText}>
           <TouchableOpacity onPress={choosePhoto}>
@@ -130,9 +228,13 @@ export default function CreatePostsScreen() {
           <TouchableOpacity
             style={[styles.button, postPhoto?.length && styles.buttonActive]}
             activeOpacity={0.5}
+            onPress={handleSubmit}
           >
             <Text
-              style={[styles.buttonText, postPhoto?.length && buttonTextActive]}
+              style={[
+                styles.buttonText,
+                postPhoto?.length && styles.buttonTextActive,
+              ]}
             >
               Опублікувати
             </Text>
@@ -147,6 +249,7 @@ export default function CreatePostsScreen() {
             size={24}
             color="#BDBDBD"
             style={[postPhoto?.length && styles.buttonTextActive]}
+            onPress={resetPost}
           />
         </View>
       </View>
@@ -174,6 +277,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#E8E8E8",
+  },
+
+  image: {
+    display: "flex",
+    width: "100%",
+    height: 240,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   cameraWrap: {
@@ -288,5 +400,9 @@ const styles = StyleSheet.create({
     marginTop: "auto",
     marginLeft: "auto",
     marginRight: "auto",
+  },
+
+  spinnerTextStyle: {
+    color: "#BDBDBD",
   },
 });
