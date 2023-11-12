@@ -36,24 +36,32 @@ export default function CreatePostsScreen() {
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.log("Permission to access location was denied");
+        } else {
+          const location = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Highest,
+            maximumAge: 5000,
+          });
+          setCurrentGeoLocation(location.coords);
+        }
+      } catch (error) {
         console.log("Permission to access location was denied");
-      } else {
-        const location = await Location.getCurrentPositionAsync({
-          accuracy: Location.Accuracy.Highest,
-          maximumAge: 5000,
-        });
-        setCurrentGeoLocation(location.coords);
       }
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
-      MediaLibrary.requestPermissionsAsync();
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
+      try {
+        MediaLibrary.requestPermissionsAsync();
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        setHasPermission(status === "granted");
+      } catch (error) {
+        console.log("No access to camera!");
+      }
     })();
   }, []);
 
@@ -103,46 +111,58 @@ export default function CreatePostsScreen() {
   };
 
   const getLocation = async () => {
-    const location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.Highest,
-      maximumAge: 5000,
-    });
-    setCurrentGeoLocation(location.coords);
+    try {
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Highest,
+        maximumAge: 5000,
+      });
+      setCurrentGeoLocation(location.coords);
+    } catch (error) {
+      console.log("Couldn't get geolocation: ", error.message);
+    }
   };
 
   const getAddress = async () => {
-    if (!currentGeoLocation) {
-      await getLocation();
-    } else {
-      const reverseGeocode = await Location.reverseGeocodeAsync(
-        currentGeoLocation
-      );
+    try {
+      if (!currentGeoLocation) {
+        await getLocation();
+      } else {
+        const reverseGeocode = await Location.reverseGeocodeAsync(
+          currentGeoLocation
+        );
 
-      const { street, streetNumber, city, postalCode, country } =
-        reverseGeocode[0];
-      const address = `${street} ${streetNumber} ${city} ${postalCode}, ${country}`;
-      setAddress(address);
+        const { street, streetNumber, city, postalCode, country } =
+          reverseGeocode[0];
+        const address = `${street} ${streetNumber} ${city} ${postalCode}, ${country}`;
+        setAddress(address);
+      }
+    } catch (error) {
+      console.log("Couldn't get address: ", error.message);
     }
   };
 
   const handleSubmit = async () => {
-    const now = new Date();
-    const generatePhotoName = `Photo-${format(now, "yyyy-MM-dd HH:mm.ss")}`;
+    try {
+      const now = new Date();
+      const generatePhotoName = `Photo-${format(now, "yyyy-MM-dd HH:mm.ss")}`;
 
-    if (!photoName.trim().length) setPhotoName(generatePhotoName);
-    if (!address) await getAddress();
-    const data = {
-      img: postPhoto,
-      title: photoName,
-      comments: [],
-      likes: 0,
-      address,
-      geoLocation: currentGeoLocation,
-    };
-    console.log(data);
+      if (!photoName.trim().length) setPhotoName(generatePhotoName);
+      if (!address) await getAddress();
+      const data = {
+        img: postPhoto,
+        title: photoName,
+        comments: [],
+        likes: 0,
+        address,
+        geoLocation: currentGeoLocation,
+      };
+      console.log(data);
 
-    resetPost();
-    navigation.navigate("PostsScreen");
+      resetPost();
+      navigation.navigate("PostsScreen");
+    } catch (error) {
+      console.log("Something went wrong: ", error.message);
+    }
   };
 
   const resetPost = () => {

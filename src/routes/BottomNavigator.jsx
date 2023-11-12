@@ -79,6 +79,7 @@ export default function BottomNavigator() {
               <HeaderBackBtn />
             </View>
           ),
+          unmountOnBlur: true,
         }}
       ></Tab.Screen>
       <Tab.Screen

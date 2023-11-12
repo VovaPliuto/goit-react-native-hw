@@ -13,7 +13,7 @@ const MainStack = createStackNavigator();
 export default function MainNavigator() {
   return (
     <MainStack.Navigator
-      initialRouteName="Registration"
+      initialRouteName="Login"
       screenOptions={{ headerShown: false }}
     >
       <MainStack.Screen name="Registration" component={RegistrationScreen} />
