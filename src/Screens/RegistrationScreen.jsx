@@ -16,6 +16,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { AntDesign } from "@expo/vector-icons";
 
+import { registerDB } from "../redux/auth/authOperations";
+
 export default function RegistrationScreen() {
   const navigation = useNavigation();
 
